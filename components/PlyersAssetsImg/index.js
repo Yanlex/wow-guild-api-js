@@ -29,7 +29,9 @@ function downloadImages() {
   client
     .connect()
     .then(() =>
-      client.query("SELECT name AS character_name, thumbnail_url FROM members")
+      client.query(
+        "SELECT name AS character_name, thumbnail_url FROM members WHERE thumbnail_url IS NOT NULL AND thumbnail_url != ''"
+      )
     )
     .then((res) => {
       res.rows.forEach(async (row, index) => {
