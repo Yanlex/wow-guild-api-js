@@ -2,13 +2,20 @@ const { Client } = require("pg");
 const fs = require("fs");
 const fetch = require("node-fetch");
 const path = require("path");
+require("dotenv").config();
+
+hostPostgres = process.env.DOCKER_POSTGRES_CONTAINER_ADDRESS;
+userPostgres = process.env.DOCKER_POSTGRES_USERNAME;
+passwordPostgres = process.env.DOCKER_POSTGRES_PASSWORD;
+portPostgres = process.env.DOCKER_POSTGRES_PORT;
+databasePostgres = process.env.DOCKER_POSTGRES_DATABASE;
 
 const client = new Client({
-  user: "user-name",
-  host: "localhost",
-  database: "kvd_guild",
-  password: "strong-password",
-  port: 5432,
+  user: userPostgres,
+  host: hostPostgres,
+  database: databasePostgres,
+  password: passwordPostgres,
+  port: portPostgres,
 });
 
 // Загрузка изображений в папку assets/img

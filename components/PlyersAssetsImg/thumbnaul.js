@@ -4,14 +4,22 @@ const path = require("path");
 
 const INTERVAL_DELAY = 220; // интервал чтобы не превысить количество запросов к апи
 
-// Параметры подключения к БД
+require("dotenv").config();
+
+hostPostgres = process.env.DOCKER_POSTGRES_CONTAINER_ADDRESS;
+userPostgres = process.env.DOCKER_POSTGRES_USERNAME;
+passwordPostgres = process.env.DOCKER_POSTGRES_PASSWORD;
+portPostgres = process.env.DOCKER_POSTGRES_PORT;
+databasePostgres = process.env.DOCKER_POSTGRES_DATABASE;
+
 const pool = new Pool({
-  user: "user-name",
-  host: "localhost",
-  database: "kvd_guild",
-  password: "strong-password",
-  port: 5432,
+  user: userPostgres,
+  host: hostPostgres,
+  database: databasePostgres,
+  password: passwordPostgres,
+  port: portPostgres,
 });
+
 // Добавляем ссылку на аватарки
 async function updateMembersWithThumbnails() {
   try {

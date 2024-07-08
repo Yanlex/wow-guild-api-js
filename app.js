@@ -6,14 +6,22 @@ const app = express();
 const compression = require("compression");
 const cron = require("node-cron");
 
+require("dotenv").config();
+
+hostPostgres = process.env.DOCKER_POSTGRES_CONTAINER_ADDRESS;
+userPostgres = process.env.DOCKER_POSTGRES_USERNAME;
+passwordPostgres = process.env.DOCKER_POSTGRES_PASSWORD;
+portPostgres = process.env.DOCKER_POSTGRES_PORT;
+databasePostgres = process.env.DOCKER_POSTGRES_DATABASE;
+
 // работа с БД
 const { Pool } = require("pg");
 const pool = new Pool({
-  user: "user-name",
-  host: "localhost",
-  database: "kvd_guild",
-  password: "strong-password",
-  port: 5432,
+  user: userPostgres,
+  host: hostPostgres,
+  database: databasePostgres,
+  password: passwordPostgres,
+  port: portPostgres,
 });
 
 // REDIS
@@ -24,10 +32,11 @@ const {
   updateMembersWithThumbnails,
 } = require("./components/PlyersAssetsImg/thumbnaul");
 const downloadImages = require("./components/PlyersAssetsImg");
+const path = require("path");
 
 // Сначала заполняет столбец thumbnail_url в таблице members ссылками на аватарки, потом запускает скачивание аватарок отсутвующих в папке assets/img
 async function updateAndDownloadImages() {
-  await updateMembersWithThumbnails(); // Обновление членов с миниатюрами
+  await updateMembersWithThumbnails(); // Обновление ссылков на аватарки
   downloadImages(); // Загрузка изображений
 }
 
@@ -60,7 +69,9 @@ cron.schedule(
 // *** APP USE *** ///
 app.use(bodyParser.json({ limit: "10mb" }));
 // Настройка правил CORS
-app.use(cors({ credentials: true, origin: "https://sanyadev.ru/" }));
+app.use(cors({ credentials: true, origin: `http://wow-guild-front-nginx` }));
+// app.use(cors({ credentials: true, origin: "http://wow-guild-front-nginx" }));
+
 // app.use(cookieParser(cookieSecret));
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
@@ -72,9 +83,9 @@ app.use(compression());
 // Устанавливаем путь к папке, содержащей изображения аватарок игровых персонажей
 // app.use("/img", express.static(path.join(__dirname, "./dist/kvd/assets/img")));
 // Устанавливаем путь к папке, содержащей изображения аватарок игровых персонажей
-// app.use("/api/avatar", express.static(path.join(__dirname, "./assets/avatars")));
+app.use("/api/avatar", express.static(path.join(__dirname, "./assets/img")));
 // Устанавливаем путь к папке, содержащей классовых изображения
-// app.use("/api/class", express.static(path.join(__dirname, "./assets/class")));
+app.use("/api/class", express.static(path.join(__dirname, "./assets/class")));
 // Устанавливаем путь к папке, содержащей изображения аватарок игровых персонажей
 // app.use(
 //   "/video",

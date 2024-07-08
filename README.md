@@ -5,24 +5,23 @@
 # Делой
 `npm install`
 
-### Параметры подключения к БД
-```js
-const pool = new Pool({
-  user: "user-name",
-  host: "localhost",
-  database: "kvd_guild",
-  password: "strong-password",
-  port: 5432,
-});
-```
-### Важно указать домен с которого разрешим соединение к АПИ
-```js 
-app.use(cors({ credentials: true, origin: "https://yourDomainName.ru/" }));
-```
+### Настроить кофигурацию в .env
+`DOCKER_POSTGRES_CONTAINER_ADDRESS=yanlex-wow-guild-postgres`
+`DOCKER_POSTGRES_USERNAME=user-name`
+`DOCKER_POSTGRES_PASSWORD=strong-password`
+`DOCKER_POSTGRES_PORT=5432`
+`DOCKER_POSTGRES_DATABASE=kvd_guild`
+`DOCKER_NGINX=yanlex-wow-guild-front-nginx`
+
+### Указать ссылку на гильдию
+В функции getGuildData нужно указать ссылку на гильдию
+`db/components/GuildDB/fetchGuild/index.js`
+
 
 ### Assets
 Скачивание всех аватарок игроков в папку assets/img, запускается крон задача в app.js
-Эту папку потом переносим на фронт
+К этой статике фронт обращается по АПИ
+
 29 мин 11 час ежедневно
 ```js
 cron.schedule(
@@ -40,13 +39,3 @@ cron.schedule(
   }
 );
 ```
-
-### Запуск через менеджер процессов pm2
-- Запуск
-`pm2 start ecosystem.config.js`
- - Посмотреть запщенные
-`pm2 status`
-- Войти в консоль запущенного процесса
-`pm2 log id`
-- Удалить процесс
-`pm2 delete id`
