@@ -1,5 +1,9 @@
+## Порядок запуска проекта
+- Postgres + Golang APP (updater) [yanlex-wow-guild-postgres + yanlex-wow-guild-updater](https://github.com/Yanlex/wow-guild-db )
+- Front + Nginx - [wow-guild-front-nginx](https://github.com/Yanlex/wow-guild-front-nginx)
+- ExpressJS API [yanlex-wow-guild-api](https://github.com/Yanlex/wow-guild-api-js )
+- 
 # WoW Guild API
-
 Апишка на бекенд
 
 # Делой
